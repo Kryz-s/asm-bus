@@ -126,18 +126,7 @@ public class ASMEventDispatcherGenerator {
     cw.visitEnd();
 
     byte[] bytecode = cw.toByteArray();
-//    try {
-//      String outputPath = "C:/Users/tcikm/IdeaProjects/commit/asm-bus/build/temp/" + dispatcherName + ".class";
-//
-//      java.nio.file.Files.write(
-//        java.nio.file.Paths.get(outputPath),
-//        bytecode
-//      );
-//      System.out.println("✅ Bytecode generado y guardado en: " + outputPath);
-//    } catch (Exception e) {
-//      System.err.println("Error al guardar el bytecode: " + e.getMessage());
-//      e.printStackTrace();
-//    }
+    
     Class<?> dispatcherClass = new EventBusClassLoader().defineClass(internalName.replace('/', '.'), bytecode);
 
     Class<?>[] constructorTypes = listeners.stream()
@@ -165,4 +154,5 @@ public class ASMEventDispatcherGenerator {
       return super.defineClass(name, bytecode, 0, bytecode.length);
     }
   }
+
 }
