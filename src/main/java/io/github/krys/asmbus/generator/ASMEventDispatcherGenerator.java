@@ -109,8 +109,7 @@ public class ASMEventDispatcherGenerator {
     mv.visitMaxs(0, 0);
     mv.visitEnd();
 
-    // 6. Generar el método puente (bridge method) requerido por Java 8+ para genericidad
-    // Este método simplemente llama al método dispatch(Event)
+    // dispatch() method bridge
     String bridgeDesc = Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(Object.class));
     MethodVisitor bridgeMv = cw.visitMethod(Opcodes.ACC_PUBLIC | Opcodes.ACC_BRIDGE | Opcodes.ACC_SYNTHETIC,
       "dispatch", bridgeDesc, null, null);
@@ -156,3 +155,4 @@ public class ASMEventDispatcherGenerator {
   }
 
 }
+
