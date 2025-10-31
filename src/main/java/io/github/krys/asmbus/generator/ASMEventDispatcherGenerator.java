@@ -1,7 +1,7 @@
 package io.github.krys.asmbus.generator;
 
 import io.github.krys.asmbus.dispatcher.EventDispatcher;
-import io.github.krys.asmbus.event.AbstractCancellableEvent;
+import io.github.krys.asmbus.event.Cancellable;
 import io.github.krys.asmbus.event.Event;
 import io.github.krys.asmbus.reflection.ListenerMethodInfo;
 import org.objectweb.asm.*;
@@ -86,15 +86,15 @@ public class ASMEventDispatcherGenerator {
 
       mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, listenerInternalName, method.getName(), methodDesc, false);
 
-      if (AbstractCancellableEvent.class.isAssignableFrom(eventType)) {
+      if (Cancellable.class.isAssignableFrom(eventType)) {
         Label nextListener = new Label();
 
         mv.visitVarInsn(Opcodes.ALOAD, eventLocalIndex);
 
-        String cancelableName = Type.getInternalName(AbstractCancellableEvent.class);
+        String cancelableName = Type.getInternalName(Cancellable.class);
         mv.visitTypeInsn(Opcodes.CHECKCAST, cancelableName);
 
-        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, cancelableName, "isCancelled", "()Z", false);
+        mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, cancelableName, "isCancelled", "()Z", true);
 
         mv.visitJumpInsn(Opcodes.IFEQ, nextListener);
 
@@ -155,4 +155,5 @@ public class ASMEventDispatcherGenerator {
   }
 
 }
+
 
